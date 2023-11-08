@@ -43,6 +43,7 @@ function back-dev() {
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "sleep 2" C-m
     tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "chmod 777 -R consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
@@ -56,6 +57,7 @@ function back-prod() {
     echo -e "\e[31mActivando back prod\e[0m"
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "chmod 777 -R consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
