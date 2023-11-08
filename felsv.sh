@@ -17,7 +17,7 @@ function control-errores() {
 }
 
 function front-dev() {
-    echo "Iniciando dev Frontend"
+    echo -e "\e[31mActivando front dev\e[0m"
     tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
     tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "npm install ; npm run dev" C-m
@@ -26,7 +26,7 @@ function front-dev() {
 }
 
 function front-prod() {
-    echo "Iniciando prod Frontend"
+    echo -e "\e[31mActivando front prod\e[0m"
     tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
     tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "docker build -t consiti-felsv-consiti-fe ." C-m
@@ -35,7 +35,7 @@ function front-prod() {
 }
 
 function back-dev() {
-    echo "Iniciando dev Backend"
+    echo -e "\e[31mActivando back dev\e[0m"
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
@@ -46,7 +46,7 @@ function back-dev() {
 }
 
 function back-prod() {
-    echo "Iniciando prod Backend"
+    echo -e "\e[31mActivando back prod\e[0m"
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
@@ -57,15 +57,17 @@ function back-prod() {
 }
 
 function create-tmux-sessions() {
-    echo "creando sessiones"
+    echo -e "\e[31mCreando sessiones tmux\e[0m"
     tmux start-server
     tmux new-session -d -s $back_s
     tmux new-session -d -s $front_s
-    echo "sessiones creadas"
+    echo -e "\e[31mSessiones creadas!\e[0m"
+
 }
 
 function prepair-env() {
-    echo "Instalando herramientas"
+    echo -e "\e[31mPreparando entorno y wget\e[0m"
+
     mkdir felsv-project
     cd felsv-project
     wget $env_template_url
@@ -75,7 +77,8 @@ function prepair-env() {
 
 
 function tool-install() {
-    echo "Instalando cosas"
+    echo -e "\e[31mInstalando lo necesario\e[0m"
+
     # Instalacion de herramientas
     DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg nodejs npm make tmux || control-errores
     DEBIAN_FRONTEND=noninteractive sudo install -m 0755 -d /etc/apt/keyrings || control-errores
@@ -85,7 +88,8 @@ function tool-install() {
 }
 
 function docker-install-funct() {
-    echo "Instalando docker"
+    echo -e "\e[31mInstalando docker\e[0m"
+
     # Instalacion de docker
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     sudo chmod a+r /etc/apt/keyrings/docker.gpg || control-errores
@@ -100,26 +104,30 @@ function docker-install-funct() {
     DEBIAN_FRONTEND=noninteractive apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose || control-errores
 
     # Llamada a la post-instalacion de docker
-    echo "Finalizacion exitosa de instalacion de docker"
+    echo -e "\e[31mInstalacion de docker exitosa\e[0m"
+
     docker-post-install-funct
 }
 
 function docker-post-install-funct() {
-    echo "postinstalacion de docker"
+    echo -e "\e[31mComenzando post-instalacion de docker\e[0m"
+
     # Post-instalacion de docker
     if ! getent group docker >/dev/null; then
         sudo groupadd docker
     fi
     usermod -aG docker $USER
     newgrp docker
-    echo "postinstalacion exitosa"
+    echo -e "\e[31mFinalizacion de post-instalacion de docker\e[0m"
+
 
     # Cargar la configuración en el shell actual
     source /etc/environment
 }
 
 function activate-dev-profile() {
-    echo "Activando el perfil dev"
+    echo -e "\e[31mActivando perfil dev\e[0m"
+
     # Llamada al backend
     back-dev
     sleep 5
@@ -127,7 +135,8 @@ function activate-dev-profile() {
     front-dev
 }
 function activate-prod-profile() {
-    echo "Activando el perfil back"
+    echo -e "\e[31mActivando perfil prod\e[0m"
+
     # Llamada al backend
     back-prod
     sleep 5
