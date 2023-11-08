@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Declaracion de variables
-back_s="backend-session"
-front_s="frontend-session"
+back_s="backend_session"
+front_s="frontend_session"
 consiti_felsv-back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv.zip"
 env_template_url="https://felsv.s3.us-east-2.amazonaws.com/env-template"
 # Declaracion de funciones
 function control-errores() {
     if [ $? -ne 0 ]; then
+        touch log-error.txt
         echo "Error de ejecucion! en la linea $LINENO al ejecutar: $BASH_COMMAND" >> log-error.txt
     fi
 }
@@ -49,6 +50,7 @@ function back-prod() {
 }
 
 function create-tmux-sessions() {
+    tmux start-server
     tmux new-session -d -s ${back_s}
     tmux new-session -d -s ${front_s}
 }
@@ -100,12 +102,14 @@ function docker-post-install-funct() {
 function activate-dev-profile() {
     # Llamada al backend
     back-dev
+    sleep 5
     # Llamada al frontend
     front-dev
 }
 function activate-prod-profile() {
     # Llamada al backend
     back-prod
+    sleep 5
     # Llamada al frontend
     front-prod
 }
