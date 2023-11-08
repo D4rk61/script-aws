@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# Despliegue de Aplicacion backend y frontend consiti-felsv
+#
+# Author: Jose Reynoso
+# Uso:
+#
+# El script por si solo al ejecutarse usara la bandera
+#
+# --dev     : esto hara que nuestra app entre en modo developer, no apta para
+# produccion
+#
+# Por otro lado si queremos usar este script en un servidor real ya desplegar
+# como tal la aplicacion, usaremos:
+#
+# --prod    : esto hara que nuestra app entre en modo despliegue
+#
+# Se inicializaria de la siguiente manera:
+#
+# $ chmod 774 felsv.sh
+# $ ./felsv.sh --prod   : para produccion
+# $ ./felsv.sh --dev    : para desarrollo
+#
+
 # Declaracion de variables
 #
 export DEBIAN_FRONTEND=noninteractive
@@ -49,6 +71,7 @@ function back-dev() {
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
     # dentro de la terminal ssh-nest
+    tmux send-keys -t $back_s "sleep 10" C-m
     tmux send-keys -t $back_s "docker exec -it nest-consiti bash -c 'npm install ; npm run start:dev'" C-m
     control-errores
 }
@@ -63,6 +86,7 @@ function back-prod() {
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
     # dentro de la terminal ssh-nest
+    tmux send-keys -t $back_s "sleep 10" C-m
     tmux send-keys -t $back_s"docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
     control-errores
 }
