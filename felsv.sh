@@ -121,8 +121,8 @@ function tool-install() {
     # Instalacion de nvm
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
     source ~/.nvm/nvm.sh
-    nvm install 16
-    nvm use 16 --default
+    nvm install 21
+    nvm use 21 --default
 
     # Llamada a la instalacion de docker
     docker-install-funct
@@ -142,13 +142,25 @@ function docker-install-funct() {
 
     DEBIAN_FRONTEND=noninteractive apt update -y || control-errores
 
-    DEBIAN_FRONTEND=noninteractive apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose || control-errores
+    DEBIAN_FRONTEND=noninteractive apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin || control-errores
+
+    # Llamada a la instalacion de docker-compose
+    docker-compose-install-funct
 
     # Llamada a la post-instalacion de docker
     echo -e "\e[31mInstalacion de docker exitosa\e[0m"
 
     docker-post-install-funct
 }
+
+
+function docker-compose-install-funct() {
+    sudo curl -L "https://github.com/docker/compose/releases/download/$desired_version/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    /usr/local/bin/docker-compose 
+    echo -e "\e[31mFinalizacion de instalacion de docker-compose\e[0m"
+}
+
 
 function docker-post-install-funct() {
     echo -e "\e[31mComenzando post-instalacion de docker\e[0m"
