@@ -62,6 +62,7 @@ function create-tmux-sessions() {
 }
 
 function prepair-env() {
+    echo "Instalando herramientas"
     mkdir felsv-project
     cd felsv-project
     wget $env_template_url
@@ -71,8 +72,9 @@ function prepair-env() {
 
 
 function tool-install() {
+    echo "Instalando cosas"
     # Instalacion de herramientas
-    DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg nodejs npm make make-guile tmux || control-errores
+    DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg nodejs npm make tmux || control-errores
     sudo install -m 0755 -d /etc/apt/keyrings || control-errores
 
     # Llamada a la instalacion de docker
@@ -80,6 +82,7 @@ function tool-install() {
 }
 
 function docker-install-funct() {
+    echo "Instalando docker"
     # Instalacion de docker
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     sudo chmod a+r /etc/apt/keyrings/docker.gpg || control-errores
@@ -94,16 +97,19 @@ function docker-install-funct() {
     DEBIAN_FRONTEND=noninteractive apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose || control-errores
 
     # Llamada a la post-instalacion de docker
+    echo "Finalizacion exitosa de instalacion de docker"
     docker-post-install-funct
 }
 
 function docker-post-install-funct() {
+    echo "postinstalacion de docker"
     # Post-instalacion de docker
     if ! getent group docker >/dev/null; then
         sudo groupadd docker
     fi
     sudo usermod -aG docker $USER
     newgrp docker
+    echo "postinstalacion exitosa"
 }
 
 function activate-dev-profile() {
