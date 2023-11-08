@@ -120,14 +120,14 @@ function docker-post-install-funct() {
     fi
     echo -e "\e[31mFinalizacion de creacion grupo docker y asignando el grupo docker\e[0m"
     usermod -aG docker $USER
-    echo -e "\e[31ejecutando newgrp\e[0m"
-    newgrp docker
-    echo -e "\e[31finalizando newgrp\e[0m"
+    #echo -e "\e[31ejecutando newgrp\e[0m"
+    #newgrp docker
+    #echo -e "\e[31finalizando newgrp\e[0m"
     echo -e "\e[31mFinalizacion de post-instalacion de docker\e[0m"
 
 
     # Cargar la configuración en el shell actual
-    source /etc/environment
+    #source /etc/environment
 }
 
 function activate-dev-profile() {
