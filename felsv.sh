@@ -19,7 +19,9 @@ function control-errores() {
 function front-dev() {
     echo -e "\e[31mActivando front dev\e[0m"
     tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
-    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "sleep 2" C-m
+    tmux send-keys -t $front_s "cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "npm install ; npm run dev" C-m
     control-errores
 
@@ -28,7 +30,9 @@ function front-dev() {
 function front-prod() {
     echo -e "\e[31mActivando front prod\e[0m"
     tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
-    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "sleep 2" C-m
+    tmux send-keys -t $front_s "cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "docker build -t consiti-felsv-consiti-fe ." C-m
     tmux send-keys -t $front_s "docker run -pd 80:80 consiti-felsv-consiti-fe:latest" C-m
     control-errores
@@ -36,7 +40,10 @@ function front-prod() {
 
 function back-dev() {
     echo -e "\e[31mActivando back dev\e[0m"
-    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "sleep 2" C-m
+    tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
@@ -47,7 +54,9 @@ function back-dev() {
 
 function back-prod() {
     echo -e "\e[31mActivando back prod\e[0m"
-    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
