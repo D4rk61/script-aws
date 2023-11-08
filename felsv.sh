@@ -14,52 +14,58 @@ function control-errores() {
 }
 
 function front-dev() {
-    tmux send-keys -t ${front_s} "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
-    tmux send-keys -t ${front_s} "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
-    tmux send-keys -t ${front_s} "npm install ; npm run dev" C-m
+    echo "Iniciando dev Frontend"
+    tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
+    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "npm install ; npm run dev" C-m
     control-errores
 
 }
 
 function front-prod() {
-    tmux send-keys -t ${front_s} "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
-    tmux send-keys -t ${front_s} "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
-    tmux send-keys -t ${front_s} "docker build -t consiti-felsv-consiti-fe ." C-m
-    tmux send-keys -t ${front_s} "docker run -pd 80:80 consiti-felsv-consiti-fe:latest" C-m
+    echo "Iniciando prod Frontend"
+    tmux send-keys -t $front_s "git clone https://github.com/D4rk61/ReactJS-login.git" C-m
+    tmux send-keys -t $front_s "mv ReactJS-login consiti-felsv-frontend ; cd consiti-felsv-frontend" C-m
+    tmux send-keys -t $front_s "docker build -t consiti-felsv-consiti-fe ." C-m
+    tmux send-keys -t $front_s "docker run -pd 80:80 consiti-felsv-consiti-fe:latest" C-m
     control-errores
 }
 
 function back-dev() {
-    tmux send-keys -t ${back_s} "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
-    tmux send-keys -t ${back_s} "mv env-template .env" C-m
+    echo "Iniciando dev Backend"
+    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
-    tmux send-keys -t ${back_s} "sudo make start ; sudo make ssh-nest" C-m
+    tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
     # dentro de la terminal ssh-nest
-    tmux send-keys -t ${back_s} "docker exec -it nest-consiti bash -c 'npm install ; npm run start:dev'" C-m
+    tmux send-keys -t $back_s "docker exec -it nest-consiti bash -c 'npm install ; npm run start:dev'" C-m
     control-errores
 }
 
 function back-prod() {
-    tmux send-keys -t ${back_s} "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
-    tmux send-keys -t ${back_s} "mv env-template .env" C-m
+    echo "Iniciando prod Backend"
+    tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend ; mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
-    tmux send-keys -t ${back_s} "sudo make start ; sudo make ssh-nest" C-m
+    tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
     # dentro de la terminal ssh-nest
-    tmux send-keys -t ${back_s} "docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
+    tmux send-keys -t $back_s"docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
     control-errores
 }
 
 function create-tmux-sessions() {
+    echo "creando sessiones"
     tmux start-server
-    tmux new-session -d -s ${back_s}
-    tmux new-session -d -s ${front_s}
+    tmux new-session -d -s $back_s
+    tmux new-session -d -s $front_s
+    echo "sessiones creadas"
 }
 
 function prepair-env() {
     mkdir felsv-project
     cd felsv-project
-    wget ${env_template_url}
-    wget ${consiti_felsv_back_url}
+    wget $env_template_url
+    wget $consiti_felsv_back_url
     unzip consiti-felsv.zip
 }
 
@@ -101,6 +107,7 @@ function docker-post-install-funct() {
 }
 
 function activate-dev-profile() {
+    echo "Activando el perfil dev"
     # Llamada al backend
     back-dev
     sleep 5
@@ -108,6 +115,7 @@ function activate-dev-profile() {
     front-dev
 }
 function activate-prod-profile() {
+    echo "Activando el perfil back"
     # Llamada al backend
     back-prod
     sleep 5
