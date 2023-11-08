@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # Declaracion de variables
+#
+export DEBIAN_FRONTEND=noninteractive
+
 back_s="backend_session"
 front_s="frontend_session"
 consiti_felsv_back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv.zip"
@@ -75,7 +78,7 @@ function tool-install() {
     echo "Instalando cosas"
     # Instalacion de herramientas
     DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg nodejs npm make tmux || control-errores
-    sudo install -m 0755 -d /etc/apt/keyrings || control-errores
+    DEBIAN_FRONTEND=noninteractive sudo install -m 0755 -d /etc/apt/keyrings || control-errores
 
     # Llamada a la instalacion de docker
     docker-install-funct
@@ -107,9 +110,12 @@ function docker-post-install-funct() {
     if ! getent group docker >/dev/null; then
         sudo groupadd docker
     fi
-    sudo usermod -aG docker $USER
+    usermod -aG docker $USER
     newgrp docker
     echo "postinstalacion exitosa"
+
+    # Cargar la configuración en el shell actual
+    source /etc/environment
 }
 
 function activate-dev-profile() {
