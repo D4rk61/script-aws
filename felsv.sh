@@ -89,8 +89,14 @@ function tool-install() {
     echo -e "\e[31mInstalando lo necesario\e[0m"
 
     # Instalacion de herramientas
-    DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg nodejs npm make tmux || control-errores
+    DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg npm make tmux || control-errores
     DEBIAN_FRONTEND=noninteractive sudo install -m 0755 -d /etc/apt/keyrings || control-errores
+
+    # Instalacion de nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    source ~/.nvm/nvm.sh
+    nvm install 16
+    nvm use 16 --default
 
     # Llamada a la instalacion de docker
     docker-install-funct
