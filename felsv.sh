@@ -113,11 +113,16 @@ function docker-post-install-funct() {
     echo -e "\e[31mComenzando post-instalacion de docker\e[0m"
 
     # Post-instalacion de docker
+
+    echo -e "\e[31mCreando grupo docker\e[0m"
     if ! getent group docker >/dev/null; then
         sudo groupadd docker
     fi
+    echo -e "\e[31mFinalizacion de creacion grupo docker y asignando el grupo docker\e[0m"
     usermod -aG docker $USER
+    echo -e "\e[31ejecutando newgrp\e[0m"
     newgrp docker
+    echo -e "\e[31finalizando newgrp\e[0m"
     echo -e "\e[31mFinalizacion de post-instalacion de docker\e[0m"
 
 
