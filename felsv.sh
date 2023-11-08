@@ -3,13 +3,13 @@
 # Declaracion de variables
 back_s="backend_session"
 front_s="frontend_session"
-consiti_felsv-back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv.zip"
+consiti_felsv_back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv.zip"
 env_template_url="https://felsv.s3.us-east-2.amazonaws.com/env-template"
 # Declaracion de funciones
 function control-errores() {
     if [ $? -ne 0 ]; then
         touch log-error.txt
-        echo "Error de ejecucion! en la linea $LINENO al ejecutar: $BASH_COMMAND" >> log-error.txt
+        echo "Error de ejecucion! en la linea $LINENO" >> log-error.txt
     fi
 }
 
@@ -56,9 +56,10 @@ function create-tmux-sessions() {
 }
 
 function prepair-env() {
-    mkdir felsv-project ; cd felsv-project
+    mkdir felsv-project
+    cd felsv-project
     wget ${env_template_url}
-    wget ${consiti_felsv-back_url}
+    wget ${consiti_felsv_back_url}
     unzip consiti-felsv.zip
 }
 
@@ -117,6 +118,7 @@ function activate-prod-profile() {
 function main() {
     # Ejecutando llamada a funciones
     tool-install
+    sleep 5
     prepair-env
 
     # Funcion que crea las sessiones para los 2 despliegues
