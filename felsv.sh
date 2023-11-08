@@ -65,7 +65,7 @@ function create-tmux-sessions() {
 
 }
 
-function prepair-env() {
+function prepair_env() {
     echo -e "\e[31mPreparando entorno y wget\e[0m"
 
     mkdir felsv-project
@@ -153,7 +153,7 @@ function main() {
     # Ejecutando llamada a funciones
     tool-install
     sleep 5
-    prepair-env
+    prepair_env
 
     # Funcion que crea las sessiones para los 2 despliegues
     create-tmux-sessions
