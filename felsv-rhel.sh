@@ -87,7 +87,7 @@ function back-prod() {
     tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "mv env-template .env" C-m
     # Ejecucion de make
-    tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
+    tmux send-keys -t $back_s "sudo make start" C-m
     # dentro de la terminal ssh-nest
     tmux send-keys -t $back_s "sleep 10" C-m
     tmux send-keys -t $back_s "docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
@@ -119,7 +119,7 @@ function tool-install() {
     # Instalacion de herramientas
     yum update -y
     yum install -y git make tmux unzip
-    yum install -y git unzip ca-certificates curl gnupg npm make tmux  || control-errores
+    yum install -y git unzip ca-certificates gnupg npm make tmux  || control-errores
     dnf install -y make tmux  || control-errores
     # Instalacion de nodejs
     node-install-funct
@@ -198,18 +198,20 @@ function main() {
     # Funcion que crea las sessiones para los 2 despliegues
     create-tmux-sessions
     sleep 2
-    if [ "$#" -eq 0 ]; then
-        # Si no hay argumentos por defecto, instalara el modo prod
-        activate-prod-profile
+    
 
-    elif [ "\$1" == "--prod" ]; then
-        activate-prod-profile
+    case "$1" in
+        --dev)
+            activate-dev-profile
+            ;;
+        --prod)
+            activate-prod-profile
+            ;;
 
-    elif [ "\$1" == "--dev" ]; then
-        activate-dev-profile
+        *)
+            activate-dev-profile
+            ;;
 
-    else
-        echo "Argumento no reconocido. Usar --prod para producción o --dev para desarrollo."
-    fi
+    esac
 }
 main
