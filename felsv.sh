@@ -109,7 +109,7 @@ function prepair_env() {
     cd felsv-project
     wget $env_template_url
     wget $consiti_felsv_back_url
-    unzip consiti-felsv.zip
+    unzip consiti-felsv-new.zip
 }
 
 
