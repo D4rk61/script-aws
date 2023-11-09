@@ -19,8 +19,8 @@
 # Se inicializaria de la siguiente manera:
 #
 # $ chmod 774 felsv.sh
-# $ ./felsv.sh -p    : para produccion
-# $ ./felsv.sh -d    : para desarrollo
+# $ ./felsv-rhel.sh -p    : para produccion
+# $ ./felsv-rhel.sh -d    : para desarrollo
 #
 
 # Declaracion de variables
