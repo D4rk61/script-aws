@@ -1,5 +1,3 @@
-DATABASE_URL=mongodb://root:password@mongo-consiti:27017
-#DATABASE_URL=mongodb+srv://reynosojose2005:iCTsrMn1lsePeW6f@felsv-dev-cluster.9wlskfb.mongodb.net/?retryWrites=true&w=majority
 DATABASE_URL=mongodb+srv://reynosojose2005:iCTsrMn1lsePeW6f@atlascluster.wr9udtq.mongodb.net/?retryWrites=true&w=majority
 DATABASE_NAME=consiti
 JWT_SECRET=68nXWMplP48RuXY7E2KPlkjye0

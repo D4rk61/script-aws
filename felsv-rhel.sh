@@ -66,14 +66,12 @@ function back-dev() {
     echo -e "\e[32mActivando back dev\e[0m"
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "sleep 2" C-m
-    tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv ../env-template-prod ./consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "chmod 777 -R consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
-    tmux send-keys -t $back_s "mv env-template .env" C-m
+    tmux send-keys -t $back_s "mv env-template-prod .env" C-m
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start" C-m
-    tmux send-keys -t $back_s "sudo make ssh-nest" C-m
-    # dentro de la terminal ssh-nest
     tmux send-keys -t $back_s "sleep 10" C-m
     tmux send-keys -t $back_s "docker exec -it nest-consiti bash -c 'npm install ; npm run start:dev'" C-m
     control-errores
@@ -82,10 +80,11 @@ function back-dev() {
 function back-prod() {
     echo -e "\e[32mActivando back prod\e[0m"
     tmux send-keys -t $back_s "mv consiti-felsv consiti-felsv-backend" C-m
-    tmux send-keys -t $back_s "mv env-template consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "mv ../env-template-prod ./consiti-felsv-backend" C-m
+    tmux send-keys -t $back_s "cp -r ../dist  ./consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "chmod 777 -R consiti-felsv-backend" C-m
     tmux send-keys -t $back_s "cd consiti-felsv-backend" C-m
-    tmux send-keys -t $back_s "mv env-template .env" C-m
+    tmux send-keys -t $back_s "mv env-template-prod .env" C-m
     # Ejecucion de make
     tmux send-keys -t $back_s "sudo make start" C-m
     # dentro de la terminal ssh-nest
@@ -108,7 +107,7 @@ function prepair_env() {
 
     mkdir felsv-project
     cd felsv-project
-    wget $env_template_url
+    #wget $env_template_url
     wget $consiti_felsv_back_url
     unzip consiti-felsv.zip
 }
@@ -209,9 +208,8 @@ function main() {
             ;;
 
         *)
-            activate-dev-profile
+            echo "Accion no reconocida :("
             ;;
-
     esac
 }
 main
