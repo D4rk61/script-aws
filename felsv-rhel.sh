@@ -25,11 +25,10 @@
 
 # Declaracion de variables
 #
-export DEBIAN_FRONTEND=noninteractive
 
 back_s="backend_session"
 front_s="frontend_session"
-consiti_felsv_back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv-new.zip"
+consiti_felsv_back_url="https://felsv.s3.us-east-2.amazonaws.com/consiti-felsv.zip"
 env_template_url="https://felsv.s3.us-east-2.amazonaws.com/env-template"
 # Declaracion de funciones
 function control-errores() {
@@ -59,7 +58,7 @@ function front-prod() {
     tmux send-keys -t $front_s "sleep 2" C-m
     tmux send-keys -t $front_s "cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "docker build -t consiti-felsv-consiti-fe ." C-m
-    tmux send-keys -t $front_s "docker run -pd 80:80 consiti-felsv-consiti-fe:latest" C-m
+    tmux send-keys -t $front_s "docker run -p80:80 -p consiti-felsv-consiti-fe:latest" C-m
     control-errores
 }
 
@@ -111,15 +110,17 @@ function prepair_env() {
     cd felsv-project
     wget $env_template_url
     wget $consiti_felsv_back_url
-    unzip consiti-felsv-new.zip
+    unzip consiti-felsv.zip
 }
 
 
 function tool-install() {
     echo -e "\e[32mInstalando lo necesario\e[0m"
     # Instalacion de herramientas
-    sudo yum update -y
-    sudo yum install -y git unzip ca-certificates curl gnupg npm make tmux xz-utils yum-utils || control-errores
+    yum update -y
+    yum install -y git make tmux unzip
+    yum install -y git unzip ca-certificates curl gnupg npm make tmux  || control-errores
+    dnf install -y make tmux  || control-errores
     # Instalacion de nodejs
     node-install-funct
     echo -e "\e[32mInstalacion completa de nodejs\e[0m"
@@ -159,6 +160,9 @@ function docker-post-install-funct() {
     fi
     echo -e "\e[32mFinalizacion de creacion grupo docker y asignando el grupo docker\e[0m"
     usermod -aG docker $USER
+    systemctl start --now docker.service
+    systemctl enable --now docker.service
+
     echo -e "\e[32mFinalizacion de post-instalacion de docker\e[0m"
 }
 
