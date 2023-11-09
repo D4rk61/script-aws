@@ -91,7 +91,7 @@ function back-prod() {
     tmux send-keys -t $back_s "sudo make start ; sudo make ssh-nest" C-m
     # dentro de la terminal ssh-nest
     tmux send-keys -t $back_s "sleep 10" C-m
-    tmux send-keys -t $back_s"docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
+    tmux send-keys -t $back_s "docker exec -it nest-consiti bash -c 'npm install ; npm run start:prod'" C-m
     control-errores
 }
 
@@ -159,14 +159,7 @@ function docker-post-install-funct() {
     fi
     echo -e "\e[32mFinalizacion de creacion grupo docker y asignando el grupo docker\e[0m"
     usermod -aG docker $USER
-    #echo -e "\e[31ejecutando newgrp\e[0m"
-    #newgrp docker
-    #echo -e "\e[31finalizando newgrp\e[0m"
     echo -e "\e[32mFinalizacion de post-instalacion de docker\e[0m"
-
-
-    # Cargar la configuración en el shell actual
-    #source /etc/environment
 }
 
 function node-install-funct() {
