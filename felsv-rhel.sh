@@ -8,19 +8,19 @@
 #
 # El script por si solo al ejecutarse usara la bandera
 #
-# --dev     : esto hara que nuestra app entre en modo developer, no apta para
+# -d     : esto hara que nuestra app entre en modo developer, no apta para
 # produccion
 #
 # Por otro lado si queremos usar este script en un servidor real ya desplegar
 # como tal la aplicacion, usaremos:
 #
-# --prod    : esto hara que nuestra app entre en modo despliegue
+# -p    : esto hara que nuestra app entre en modo despliegue
 #
 # Se inicializaria de la siguiente manera:
 #
 # $ chmod 774 felsv.sh
-# $ ./felsv.sh --prod   : para produccion
-# $ ./felsv.sh --dev    : para desarrollo
+# $ ./felsv.sh -p    : para produccion
+# $ ./felsv.sh -d    : para desarrollo
 #
 
 # Declaracion de variables
@@ -58,7 +58,7 @@ function front-prod() {
     tmux send-keys -t $front_s "sleep 2" C-m
     tmux send-keys -t $front_s "cd consiti-felsv-frontend" C-m
     tmux send-keys -t $front_s "docker build -t consiti-felsv-consiti-fe ." C-m
-    tmux send-keys -t $front_s "docker run -p80:80 -p consiti-felsv-consiti-fe:latest" C-m
+    tmux send-keys -t $front_s "docker run -p80:80 -d consiti-felsv-consiti-fe:latest" C-m
     control-errores
 }
 
@@ -178,6 +178,7 @@ function activate-dev-profile() {
     # Llamada al frontend
     front-dev
 }
+
 function activate-prod-profile() {
     echo -e "\e[32mActivando perfil prod\e[0m"
 
@@ -188,28 +189,23 @@ function activate-prod-profile() {
     front-prod
 }
 
-function main() {
-    # Ejecutando llamada a funciones
-    tool-install
-    sleep 5
-    prepair_env
+# Ejecutando llamada a funciones
+tool-install
+sleep 5
+prepair_env
+# Funcion que crea las sessiones para los 2 despliegues
+create-tmux-sessions
+sleep 2
 
-    # Funcion que crea las sessiones para los 2 despliegues
-    create-tmux-sessions
-    sleep 2
-    
+case "$1" in
+    -d)
+        activate-dev-profile
+        ;;
+    -p)
+        activate-prod-profile
+        ;;
 
-    case "$1" in
-        --dev)
-            activate-dev-profile
-            ;;
-        --prod)
-            activate-prod-profile
-            ;;
-
-        *)
-            echo "Accion no reconocida :("
-            ;;
-    esac
-}
-main
+    *)
+        echo "Accion no reconocida :("
+        ;;
+esac
