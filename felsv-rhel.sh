@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Despliegue de Aplicacion backend y frontend consiti-felsv
+# Script esclusivo para distribuciones basadas en rhel
 #
 # Author: Jose Reynoso
 # Uso:
@@ -116,11 +117,9 @@ function prepair_env() {
 
 function tool-install() {
     echo -e "\e[32mInstalando lo necesario\e[0m"
-    DEBIAN_FRONTEND=noninteractive apt remove -y nodejs
     # Instalacion de herramientas
-    DEBIAN_FRONTEND=noninteractive apt update -y ; apt install -y git unzip ca-certificates curl gnupg npm make tmux xz-utils aptitude || control-errores
-    DEBIAN_FRONTEND=noninteractive sudo install -m 0755 -d /etc/apt/keyrings || control-errores
-
+    sudo yum update -y
+    sudo yum install -y git unzip ca-certificates curl gnupg npm make tmux xz-utils yum-utils || control-errores
     # Instalacion de nodejs
     node-install-funct
     echo -e "\e[32mInstalacion completa de nodejs\e[0m"
@@ -134,19 +133,8 @@ function docker-install-funct() {
     echo -e "\e[32mInstalando docker\e[0m"
 
     # Instalacion de docker
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    sudo chmod a+r /etc/apt/keyrings/docker.gpg || control-errores
-
-    echo \
-      "deb [arch=\"$(dpkg --print-architecture)\" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || control-errores
-
-    DEBIAN_FRONTEND=noninteractive apt update -y || control-errores
-
-    DEBIAN_FRONTEND=noninteractive apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin || control-errores
-
-    # Llamada a la instalacion de docker-compose
+    sudo yum update -y
+    sudo yum install docker -y
     docker-compose-install-funct
 
     # Llamada a la post-instalacion de docker
@@ -157,19 +145,14 @@ function docker-install-funct() {
 
 
 function docker-compose-install-funct() {
-    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-    mkdir -p $DOCKER_CONFIG/cli-plugins
-    curl -SL https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
-    echo -e "\e[32mFinalizacion de instalacion de docker-compose\e[0m"
+    sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
 }
 
 
 function docker-post-install-funct() {
     echo -e "\e[32mComenzando post-instalacion de docker\e[0m"
-
     # Post-instalacion de docker
-
     echo -e "\e[32mCreando grupo docker\e[0m"
     if ! getent group docker >/dev/null; then
         sudo groupadd docker
@@ -187,11 +170,7 @@ function docker-post-install-funct() {
 }
 
 function node-install-funct() {
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-    . ~/.bashrc
-    nvm install 20
-    curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-    DEBIAN_FRONTEND=noninteractive apt install nodejs -y
+    yum install -y nodejs
 }
 
 function activate-dev-profile() {
@@ -223,17 +202,17 @@ function main() {
     create-tmux-sessions
     sleep 2
     if [ "$#" -eq 0 ]; then
-        # Si no hay argumentos por defecto, instalara el modo dev
-        activate-dev-profile
-
-    elif [ "$1" == "--prod" ]; then
+        # Si no hay argumentos por defecto, instalara el modo prod
         activate-prod-profile
 
-    elif [ "$1" == "--dev" ]; then
+    elif [ "\$1" == "--prod" ]; then
+        activate-prod-profile
+
+    elif [ "\$1" == "--dev" ]; then
         activate-dev-profile
 
     else
-        activate-dev-profile
+        echo "Argumento no reconocido. Usar --prod para producción o --dev para desarrollo."
     fi
 }
 main
